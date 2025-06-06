@@ -1,6 +1,7 @@
 package com.view.library.librarysystem.libraryviewsystem.controller;
 
-import com.view.library.librarysystem.libraryviewsystem.api.view.LibraryBookEntryViewRequest;
+import com.view.library.librarysystem.libraryviewsystem.models.api.LibraryBookEntryViewRequest;
+import com.view.library.librarysystem.libraryviewsystem.models.api.LibraryBookEntryViewResponse;
 import com.view.library.librarysystem.libraryviewsystem.service.LibraryViewService;
 import com.view.library.librarysystem.libraryviewsystem.translator.LibraryViewSystemRequestTranslator;
 import lombok.extern.slf4j.Slf4j;
@@ -18,16 +19,16 @@ public class LibraryViewSystemController {
     LibraryViewSystemRequestTranslator libraryViewSystemRequestTranslator;
 
     @PostMapping(value="/bookEntry", consumes = MediaType.APPLICATION_JSON_VALUE ,produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> setBookEntry(@RequestBody LibraryBookEntryViewRequest libraryBookEntryViewRequest){
+    public LibraryBookEntryViewResponse setBookEntry(@RequestBody LibraryBookEntryViewRequest libraryBookEntryViewRequest){
         return libraryViewSystemRequestTranslator.libraryBookEntryViewRequestTranslator(libraryBookEntryViewRequest,null);
     }
 
     @GetMapping(value="/fetchAllBook", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getAllBookEntries(){
+    public LibraryBookEntryViewResponse getAllBookEntries(){
         return libraryViewSystemRequestTranslator.getAllLibraryBookEntriesViewRequestTranslator(null);
     }
 
-    @GetMapping(value = "/fetchBookById/{id}", produces = "application/json")
+    /*@GetMapping(value = "/fetchBookById/{id}", produces = "application/json")
     public ResponseEntity<?> fetchBookById(@PathVariable("id") String bookId){
         return libraryViewSystemRequestTranslator.getBookByIdViewRequestTranslator(bookId);
     }
@@ -42,5 +43,5 @@ public class LibraryViewSystemController {
             ,@PathVariable("id") String bookId){
         ResponseEntity<String> response = libraryViewSystemRequestTranslator.updateBookEntryViewRequestTranslator(libraryBookEntryViewRequest,bookId);
         return response;
-    }
+    }*/
 }

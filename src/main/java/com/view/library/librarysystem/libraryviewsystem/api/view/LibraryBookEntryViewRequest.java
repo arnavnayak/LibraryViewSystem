@@ -22,7 +22,7 @@ public class LibraryBookEntryViewRequest {
     @NonNull
     private String email;
 
-    //book details
+    //book details-bookName
     @NonNull
     private String bookName;
     @Nonnull

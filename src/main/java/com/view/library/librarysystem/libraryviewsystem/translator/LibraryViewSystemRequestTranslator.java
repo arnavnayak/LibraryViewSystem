@@ -1,7 +1,8 @@
 package com.view.library.librarysystem.libraryviewsystem.translator;
 
 import com.view.library.librarysystem.libraryviewsystem.api.integration.LibraryBookEntryIntegrationRequest;
-import com.view.library.librarysystem.libraryviewsystem.api.view.LibraryBookEntryViewRequest;
+import com.view.library.librarysystem.libraryviewsystem.models.api.LibraryBookEntryViewRequest;
+import com.view.library.librarysystem.libraryviewsystem.models.api.LibraryBookEntryViewResponse;
 import com.view.library.librarysystem.libraryviewsystem.service.LibraryViewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -24,7 +25,7 @@ public class LibraryViewSystemRequestTranslator {
     @Autowired
     LibraryViewService libraryViewService;
 
-    public ResponseEntity<String> libraryBookEntryViewRequestTranslator(LibraryBookEntryViewRequest libraryBookEntryViewRequest,String pathParam) {
+    public LibraryBookEntryViewResponse libraryBookEntryViewRequestTranslator(LibraryBookEntryViewRequest libraryBookEntryViewRequest, String pathParam) {
         String integrationServiceName="http://localhost:8081/";
         String integrationServiceEndpoint="library/books/integration/bookEntry";
         LibraryBookEntryIntegrationRequest libraryBookEntryIntegrationRequest = createBookEntryIntegrationRequest(libraryBookEntryViewRequest);
@@ -33,7 +34,7 @@ public class LibraryViewSystemRequestTranslator {
         return libraryViewService.libraryBookEntryIntegrationServiceCall(integrationServiceUrl, HttpMethod.POST,entity,String.class);
     }
 
-    public ResponseEntity<String> getAllLibraryBookEntriesViewRequestTranslator(String pathParam){
+    public LibraryBookEntryViewResponse getAllLibraryBookEntriesViewRequestTranslator(String pathParam){
         String integrationServiceName="http://localhost:8081/";
         String integrationServiceEndpoint="library/books/integration/fetchAllBook";
         String integrationServiceUrl=createIntegrationServiceUrl(integrationServiceName,integrationServiceEndpoint,pathParam);

@@ -1,0 +1,173 @@
+openapi: 3.0.0
+info:
+  title: Library View System
+  description: This is an API for Library view system
+  version: '1.0.0'
+  contact:
+    name: arnav nayak
+    email: arnavanayak95@gmail.com
+servers:
+  - url: http://localhost:9090/library/books/view
+paths:
+  /fetchAllBook:
+    get:
+      tags:
+        - libraryview
+      summary: Get All book details
+      description: Get the details of books present in DB
+      operationId: fetchAllBooks
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LibraryBookEntryViewResponse'
+        '400':
+          description: BAD REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: FORBIDDEN
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: INTERNAL_SERVER_ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      deprecated: false
+  /bookEntry:
+    post:
+      tags:
+        - libraryview
+      summary: Insert book and person details
+      description: Post call used to insert the book and person details
+      operationId: bookEntry
+      requestBody:
+        description: Create a new request for entering book ad person details
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LibraryBookEntryViewRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LibraryBookEntryViewResponse'
+        '400':
+          description: BAD REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: FORBIDDEN
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: INTERNAL_SERVER_ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      deprecated: false
+components:
+  schemas:
+    LibraryBookEntryViewRequest:
+      type: object
+      required:
+        - firstName
+        - email
+        - bookName
+        - authorName
+      properties:
+        firstName:
+          type: string
+          example: Arnav
+        lastName:
+          type: string
+          example: Nayak
+        email:
+          type: string
+          example: arnavnayak1234@gmail.com
+        bookName:
+          type: string
+          example: someBookName
+        authorName:
+          type: string
+          example: author's name
+    LibraryBookEntryViewResponse:
+      type: object
+      properties:
+        LibraryBookEntries:
+          type: array
+          description: list of books
+          items:
+            $ref: '#/components/schemas/LibraryBookViewResponse'
+
+    LibraryBookViewResponse:
+      title: LibraryBookViewResponse
+      type: object
+      properties:
+        bookId:
+          type: string
+          description: Random generated ID used to store in DB
+        bookNameAndAuthorName:
+          type: string
+          description: book name and author name
+        bookStatus:
+          type: string
+          description: book status
+        dateUpdated:
+          type: string
+          description: book mark
+        personName:
+          type: string
+          description: person name who borrowed
+        personEmail:
+          type: string
+          description: person email who borrowed
+
+    SError:
+      title: SError
+      type: object
+      properties:
+        code:
+          type: string
+        devMessage:
+          type: string
+        message:
+          type: string
+    ErrorResponse:
+      title: ErrorResponse
+      required:
+        - errors
+      type: object
+      properties:
+        errors:
+          type: array
+          description: array of errors
+          items:
+            $ref: '#/components/schemas/SError'

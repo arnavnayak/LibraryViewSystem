@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.view.library.librarysystem</groupId>
 	<artifactId>libraryviewsystem</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<name>LibraryViewSystem</name>
 	<description>Demo project for Library view System with Spring Boot</description>
 	<properties>
@@ -25,7 +25,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>LATEST</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -49,6 +53,21 @@
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
+		<dependency>
+			<groupId>org.openapitools</groupId>
+			<artifactId>jackson-databind-nullable</artifactId>
+			<version>0.2.6</version> <!-- Use latest if needed -->
+		</dependency>
+		<dependency>
+			<groupId>jakarta.validation</groupId>
+			<artifactId>jakarta.validation-api</artifactId>
+			<version>3.0.2</version> <!-- You can choose the latest version -->
+		</dependency>
+		<dependency>
+			<groupId>io.swagger.core.v3</groupId>
+			<artifactId>swagger-annotations</artifactId>
+			<version>2.2.30</version> <!-- Use the latest available version -->
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -65,7 +84,76 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.openapitools</groupId>
+				<artifactId>openapi-generator-maven-plugin</artifactId>
+				<version>7.12.0</version>
+				<executions>
+					<execution>
+						<id>libraryviewsystem</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>${project.basedir}/src/main/java/com/view/library/librarysystem/libraryviewsystem/api/libraryviewsystem-contract.yaml
+							</inputSpec>
+							<generatorName>spring</generatorName>
+							<apiPackage>com.view.library.librarysystem.libraryviewsystem.api</apiPackage>
+							<generateApis>false</generateApis>
+							<generateModels>true</generateModels>
+							<modelPackage>com.view.library.librarysystem.libraryviewsystem.models.api</modelPackage>
+							<invokerPackage>com.view.library.librarysystem.libraryviewsystem.adapter</invokerPackage>
+							<output>${project.build.directory}/generated-sources</output>
+							<addCompileSourceRoot>true</addCompileSourceRoot>
+							<configOptions>
+								<dateLibrary>java8-localdatetime</dateLibrary>
+								<sourceFolder>openapi</sourceFolder>
+								<!-- delegatePattern can be used to generate a delegate class that could be implemented/extended to simplify implementation -->
+								<delegatePattern>false</delegatePattern>
+							</configOptions>
+							<!--<importMappings>
+								&lt;!&ndash; Use the generic classes instead of the ones generated in the API (if possible) &ndash;&gt;
+								<importMapping>SError=se.lf.csp.common.serviceapi.api.SError</importMapping>
+								<importMapping>SResponse=se.lf.csp.common.serviceapi.api.SResponse</importMapping>
+							</importMappings>-->
+							<!-- disable generation of files not needed -->
+							<generateSupportingFiles>false</generateSupportingFiles>
+							<generateModelDocumentation>false</generateModelDocumentation>
+							<generateApiDocumentation>false</generateApiDocumentation>
+							<generateApiTests>false</generateApiTests>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.google.code.maven-replacer-plugin</groupId>
+				<artifactId>replacer</artifactId>
+				<version>1.5.3</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>replace</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<includes>
+						<include>${project.build.directory}/generated-sources/**/*.java</include>
+					</includes>
+					<regex>false</regex>
+					<replacements>
+						<replacement>
+							<token>javax.validation</token>
+							<value>jakarta.validation</value>
+						</replacement>
+						<replacement>
+							<token>javax.annotation</token>
+							<value>jakarta.annotation</value>
+						</replacement>
+					</replacements>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
-
 </project>
